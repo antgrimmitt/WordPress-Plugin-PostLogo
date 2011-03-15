@@ -14,7 +14,7 @@ class PostLogo
     }
 
     /**
-     * intsalls the table
+     * installs the table
      * @return void
      */
 
@@ -74,6 +74,7 @@ class PostLogo
 
     public function addPostLogo($imageId, $postId)
     {
+//        echo "new image postid =".$postId." imageid=".$imageId;
         global $wpdb;
         $sql = "SELECT id AS postlogoid FROM $this->table_name WHERE post_id = $postId";
         $res = $wpdb->get_row($sql,ARRAY_A);
@@ -123,19 +124,28 @@ class PostLogo
         return $res['imagepath'];
     }
 
-    /**
+    /**********
+     *  not needed in 1.1b
      * gets the post id given a image path
      * post id because WP stores images as a post of post_type attachment
      * @param  $imagepath
      * @return image id (postid)
-     */
+     *
     public function getImageId($imagepath)
     {
         global $wpdb;
-        $sql = "SELECT id AS imageid FROM " . $wpdb->prefix . "posts WHERE post_type = 'attachment' AND guid= '$imagepath';";
+        global $wplogger;
+        $filenameParts = pathinfo($imagepath);
+        print_r($filenameParts);
+        echo $filenameParts['extension'];
+        $rpstr = ".".$filenameParts['extension'];
+        echo "replace".$rpstr;
+        $imagepath2 = str_replace($rpstr,"", $imagepath);
+        echo "img path".$imagepath2 ;
+        $sql = "SELECT id AS imageid FROM " . $wpdb->prefix . "posts WHERE post_type = 'attachment' AND guid LIKE '$imagepath';";
         $res = $wpdb->get_row($sql,ARRAY_A);
         return $res['imageid'];
-    }
+    } ***********/
 }
 
 class InstallState
